@@ -1,0 +1,29 @@
+@import url('normalize.css');
+
+.input {
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.input__area {
+  display: block;
+  height: 200px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  resize: none;
+}
+
+.output__tree {
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.output__tree-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: green;
+
+  cursor: pointer;
+}
