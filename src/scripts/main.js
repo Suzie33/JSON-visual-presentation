@@ -2,6 +2,7 @@
   const inputTextarea = document.querySelector('#textarea_input');
   const startButton = document.querySelector('#button-start');
   const outputTree = document.querySelector('#output');
+  
 
   inputTextarea.addEventListener('click', function() {
     inputTextarea.textContent = '';
@@ -12,7 +13,45 @@
     const inputParsedData = parseData(inputData);
 
     createTreeBranch(inputParsedData, outputTree);
+
+    let treeItemsCollection = document.querySelectorAll('.output__tree-item');
+    console.log(treeItemsCollection);
+    
+    treeItemsCollection.forEach((item, index) => {
+      item.onmousedown = function(event) {
+        event.stopPropagation();
+
+        let shiftX = event.clientX - item.getBoundingClientRect().left;
+        let shiftY = event.clientY - item.getBoundingClientRect().top;
+
+        item.style.position = 'absolute';
+        item.style.zIndex = 1000;
+
+        function moveAt(pageX, pageY) {
+          item.style.left = pageX - shiftX + 'px';
+          item.style.top = pageY - shiftY + 'px';
+        }
+
+        function onMouseMove(event) {
+          moveAt(event.pageX, event.pageY);
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+
+        item.onmouseup = function() {
+          document.removeEventListener('mousemove', onMouseMove);
+          item.onmouseup = null;
+        };
+      };
+
+      item.ondragstart = function() {
+        return false;
+      };
+    })
+
   })
+
+  
 
   function parseData(string) {
     return JSON.parse(string);
