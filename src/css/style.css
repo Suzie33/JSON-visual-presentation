@@ -15,7 +15,7 @@
 }
 
 .output__tree {
-  padding-left: 10px;
+  padding-left: 30px;
   display: flex;
   flex-direction: column;
 }
@@ -26,4 +26,8 @@
   background-color: green;
 
   cursor: pointer;
+}
+
+.output__tree-item:last-child {
+  margin-bottom: 0;
 }
