@@ -32,8 +32,31 @@
           item.style.top = pageY - shiftY + 'px';
         }
 
+        let currentDroppable = null;
+
         function onMouseMove(event) {
           moveAt(event.pageX, event.pageY);
+
+          item.hidden = true;
+          let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+          item.hidden = false;
+
+          if (!elemBelow) return;
+
+          let droppableBelow = elemBelow.closest('.output__tree-item');
+
+          if (currentDroppable != droppableBelow) {
+            if (currentDroppable) {
+              // логика обработки процесса "вылета" из droppable (удаляем подсветку)
+              leaveDroppable(currentDroppable);
+            }
+            currentDroppable = droppableBelow;
+            
+            if (currentDroppable) {
+              // логика обработки процесса, когда мы "влетаем" в элемент droppable
+              enterDroppable(currentDroppable);
+            }
+          }
         }
 
         document.addEventListener('mousemove', onMouseMove);
@@ -43,6 +66,14 @@
           item.onmouseup = null;
         };
       };
+
+      function enterDroppable(elem) {
+        elem.style.borderBottom = '2px solid #0000FF';
+      }
+  
+      function leaveDroppable(elem) {
+        elem.style.borderBottom = '2px solid transparent';
+      }
 
       item.ondragstart = function() {
         return false;
