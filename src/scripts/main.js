@@ -8,7 +8,9 @@
     inputTextarea.textContent = '';
   })
 
-  startButton.addEventListener('click', function() {
+  function renderObjectTree() {
+    outputTree.innerHTML = '';
+
     const inputData = inputTextarea.value;
     const inputParsedData = parseData(inputData);
 
@@ -64,6 +66,7 @@
         item.onmouseup = function() {
           document.removeEventListener('mousemove', onMouseMove);
           item.onmouseup = null;
+          renderObjectTree();
         };
       };
 
@@ -79,30 +82,34 @@
         return false;
       };
     })
+  }
 
-  })
-
-  
+  startButton.addEventListener('click', renderObjectTree)
 
   function parseData(string) {
     return JSON.parse(string);
   }
 
-  function createTreeBranch(obj, container) {
+  function createTreeBranch(obj, container, index) {
     const treeBranch = document.createElement('ul');
     treeBranch.classList.add('output__tree');
     container.appendChild(treeBranch);
+
+    let indexTreeItem = index || { index: 0 };
     
     for (let [key, value] of Object.entries(obj)) {
       
       const treeItem = document.createElement('li');
       treeItem.classList.add('output__tree-item');
+      treeItem.setAttribute('data-index', indexTreeItem.index);
       treeItem.textContent = `"${key}": "${value}"`;
       treeBranch.appendChild(treeItem);
 
+      indexTreeItem.index++;
+
       if (typeof value === 'object') {
         treeItem.textContent = `"${key}":`;
-        createTreeBranch(value, treeItem);
+        createTreeBranch(value, treeItem, indexTreeItem);
       } 
     }
   }
